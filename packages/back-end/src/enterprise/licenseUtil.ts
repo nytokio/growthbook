@@ -51,6 +51,11 @@ const logger = pino({
   ...logBase,
 });
 
+// Self-hosted deployments are always treated as enterprise
+function isSelfHosted(): boolean {
+  return !stringToBoolean(process.env.IS_CLOUD);
+}
+
 function getStripeSubscriptionStatus(
   status: Stripe.Subscription.Status,
 ): SubscriptionInfo["status"] {
@@ -132,22 +137,22 @@ export function isActiveSubscriptionStatus(
 // what plan the organization is effectively on (taking into account downgrades)
 // use getEffectiveAccountPlan() instead.
 export function getAccountPlan(org: MinimalOrganization): AccountPlan {
-  if (stringToBoolean(process.env.IS_CLOUD)) {
-    // If the org has the enterprise flag, return enterprise
-    // Can remove this when all enterprise orgs are migrated to a license
-    if (org.enterprise) return "enterprise";
-
-    if (org.licenseKey) {
-      return getLicense(org.licenseKey)?.plan || "starter";
-    }
-    // Vercel starter orgs have the `restrictLoginMethod` set, but they're not pro_sso
-    if (org.isVercelIntegration) return "starter";
-    if (org.restrictAuthSubPrefix || org.restrictLoginMethod) return "pro_sso";
-    return "starter";
+  // Self-hosted deployments are always enterprise
+  if (isSelfHosted()) {
+    return "enterprise";
   }
 
-  // For self-hosted deployments
-  return "enterprise";
+  // If the org has the enterprise flag, return enterprise
+  // Can remove this when all enterprise orgs are migrated to a license
+  if (org.enterprise) return "enterprise";
+
+  if (org.licenseKey) {
+    return getLicense(org.licenseKey)?.plan || "starter";
+  }
+  // Vercel starter orgs have the `restrictLoginMethod` set, but they're not pro_sso
+  if (org.isVercelIntegration) return "starter";
+  if (org.restrictAuthSubPrefix || org.restrictLoginMethod) return "pro_sso";
+  return "starter";
 }
 
 function planHasPremiumFeature(
@@ -794,6 +799,11 @@ export async function licenseInit(
   getLicenseMetaData?: () => Promise<LicenseMetaData>,
   forceRefresh = false,
 ): Promise<Partial<LicenseInterface> | undefined> {
+  // Self-hosted deployments don't need license data; they are always enterprise
+  if (isSelfHosted()) {
+    return;
+  }
+
   const key = org?.licenseKey || process.env.LICENSE_KEY || null;
 
   if (!key) {
@@ -942,22 +952,13 @@ export function resetInMemoryLicenseCache(): void {
 }
 
 export function getLicenseError(org: MinimalOrganization): string {
+  // Self-hosted deployments never report license errors
+  if (isSelfHosted()) {
+    return "";
+  }
+
   const key = org.licenseKey || process.env.LICENSE_KEY;
   const licenseData = getLicense(key);
-  
-  if (
-    !stringToBoolean(process.env.IS_CLOUD) &&
-    stringToBoolean(process.env.IS_MULTI_ORG) &&
-    (!licenseData ||
-      !licenseData.plan ||
-      !planHasPremiumFeature(licenseData.plan, "multi-org"))
-  ) {
-    // Trying to use IS_MULTI_ORG, but the plan doesn't support it
-    // We throw error here, otherwise they would still be able to use IS_MULTI_ORG on free plans.
-    throw new Error(
-      "You need an enterprise license for multi-org functionality. Either upgrade to enterprise or remove IS_MULTI_ORG environment variable.",
-    );
-  }
 
   // If there is no license it can't have a different license error
   // Licenses might not have a plan if sign up for pro, but abandon checkout, in which case we don't want to show an error
@@ -1039,20 +1040,20 @@ export function isAirGappedLicenseKey(licenseKey: string | undefined): boolean {
 }
 
 export function getEffectiveAccountPlan(org: MinimalOrganization): AccountPlan {
-  let basicPlan: AccountPlan;
-
-  if (stringToBoolean(process.env.IS_CLOUD)) {
-    // If the org has the enterprise flag, return enterprise
-    // Can remove this when all enterprise orgs are migrated to a license
-    if (org.enterprise) return "enterprise";
-
-    if (!org.licenseKey) {
-      return getAccountPlan(org);
-    }
-    basicPlan = "starter";
-  } else {
-    basicPlan = "oss";
+  // Self-hosted deployments are always enterprise
+  if (isSelfHosted()) {
+    return "enterprise";
   }
+
+  // If the org has the enterprise flag, return enterprise
+  // Can remove this when all enterprise orgs are migrated to a license
+  if (org.enterprise) return "enterprise";
+
+  if (!org.licenseKey) {
+    return getAccountPlan(org);
+  }
+
+  const basicPlan: AccountPlan = "starter";
 
   const hasError = getLicenseError(org);
   if (hasError) {
