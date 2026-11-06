@@ -137,19 +137,19 @@ const Layout = (): React.ReactElement => {
                 href="/"
                 aria-current="page"
                 className="app-sidebar-logo active"
-                title="GrowthBook Home"
+                title="SFS Home"
                 onClick={() => setOpen(false)}
               >
                 <div className={styles.sidebarlogo}>
                   <img
                     className={styles.logo}
-                    alt="GrowthBook"
-                    src="/logo/growth-book-logomark-white.svg"
+                    alt="SFS"
+                    src="/logo/sfs-logomark.svg"
                   />
                   <img
                     className={styles.logotext}
-                    alt="GrowthBook"
-                    src="/logo/growth-book-name-white.svg"
+                    alt="SFS"
+                    src="/logo/sfs-name-white.svg"
                   />
                 </div>
               </Link>

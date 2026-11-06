@@ -3,6 +3,7 @@ import "@radix-ui/themes/styles.css";
 import "@/styles/radix-config.css";
 import "@/styles/global-radix-overrides.scss";
 import "@/styles/global.scss";
+import "@/styles/sfs-theme.css";
 
 import { AppProps } from "next/app";
 import Head from "next/head";

@@ -437,7 +437,7 @@ const TopNav: FC<{
   return (
     <>
       <Head>
-        <title>{pageTitle ? `${pageTitle} | GrowthBook` : "GrowthBook"}</title>
+        <title>{pageTitle ? `${pageTitle} | SFS` : "SFS"}</title>
       </Head>
       {editUserOpen && (
         <Modal
@@ -484,9 +484,9 @@ const TopNav: FC<{
           ) : showLogo ? (
             <div>
               <img
-                alt="GrowthBook"
-                src="/logo/growthbook-logo.png"
-                style={{ height: 40 }}
+                alt="SFS"
+                src="/logo/sfs-logo-brand.svg"
+                style={{ height: 28 }}
               />
             </div>
           ) : null}

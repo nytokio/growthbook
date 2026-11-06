@@ -135,9 +135,9 @@ const CreateOrJoinOrganization: FC<{
       <Box>
         <a href="https://www.growthbook.io" target="_blank" rel="noreferrer">
           <img
-            src="/logo/growth-book-logo-white.svg"
+            src="/logo/sfs-logo-white.svg"
             style={{ maxWidth: "150px" }}
-            alt="GrowthBook"
+            alt="SFS"
           />
         </a>
       </Box>

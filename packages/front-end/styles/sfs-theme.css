@@ -1,0 +1,226 @@
+/*
+ * SFS brand theme.
+ *
+ * Re-skins the app with the SFS dashboard palette: a #da7272 brand accent on
+ * brand-tinted zinc neutrals (the dashboard's default `theme-tinted` look: every
+ * grey has a little of the brand colour mixed in) with tight 3-6px radii
+ * (radius is set on the Radix <Theme> in services/RadixTheme.tsx).
+ *
+ * The app's accent is Radix "violet" and its neutral is Radix "gray", so
+ * redefining those two scales recolours every component without touching it.
+ *
+ * Selectors are one step more specific than Radix's own `:root` /
+ * `.dark-theme` rules (including its display-p3 overrides) so they win
+ * regardless of stylesheet order.
+ */
+
+html {
+  --sfs-tint: #da7272;
+}
+
+/* ---------- Brand + neutral scales: light ---------- */
+html:root,
+html.light-theme,
+.radix-themes.radix-themes.light {
+  --violet-1: #fffcfc;
+  --violet-2: #fef7f7;
+  --violet-3: #fdecec;
+  --violet-4: #fbdede;
+  --violet-5: #f7d0d0;
+  --violet-6: #f1bfbf;
+  --violet-7: #e8a8a8;
+  --violet-8: #df8e8e;
+  --violet-9: #da7272;
+  --violet-10: #cf6666;
+  --violet-11: #b54848;
+  --violet-12: #5a2424;
+  --violet-a1: #ff000003;
+  --violet-a2: #df000008;
+  --violet-a3: #e4000013;
+  --violet-a4: #e0000021;
+  --violet-a5: #d400002f;
+  --violet-a6: #c7000040;
+  --violet-a7: #bc000057;
+  --violet-a8: #b7000071;
+  --violet-a9: #bc00008d;
+  --violet-a10: #af000099;
+  --violet-a11: #980000b7;
+  --violet-a12: #3f0000db;
+  --violet-contrast: #ffffff;
+  --violet-surface: #fef7f7cc;
+  --violet-indicator: var(--violet-9);
+  --violet-track: var(--violet-9);
+
+  /* Brand-tinted zinc */
+  --gray-1: color-mix(in oklab, #fcfcfc 96%, var(--sfs-tint));
+  --gray-2: color-mix(in oklab, #fafafa 95%, var(--sfs-tint));
+  --gray-3: color-mix(in oklab, #f4f4f5 94%, var(--sfs-tint));
+  --gray-4: color-mix(in oklab, #ececee 93%, var(--sfs-tint));
+  --gray-5: color-mix(in oklab, #e4e4e7 93%, var(--sfs-tint));
+  --gray-6: color-mix(in oklab, #dcdcdf 92%, var(--sfs-tint));
+  --gray-7: color-mix(in oklab, #d4d4d8 92%, var(--sfs-tint));
+  --gray-8: color-mix(in oklab, #a1a1aa 90%, var(--sfs-tint));
+  --gray-9: color-mix(in oklab, #71717a 88%, var(--sfs-tint));
+  --gray-10: color-mix(in oklab, #63636b 88%, var(--sfs-tint));
+  --gray-11: color-mix(in oklab, #52525b 88%, var(--sfs-tint));
+  --gray-12: color-mix(in oklab, #18181b 89%, var(--sfs-tint));
+}
+
+/* ---------- Brand + neutral scales: dark ---------- */
+html.dark-theme,
+.radix-themes.radix-themes.dark {
+  --violet-1: #161011;
+  --violet-2: #1d1515;
+  --violet-3: #2f1a1a;
+  --violet-4: #402020;
+  --violet-5: #4e2626;
+  --violet-6: #5e2e2e;
+  --violet-7: #763a3a;
+  --violet-8: #9c4d4d;
+  --violet-9: #da7272;
+  --violet-10: #e38282;
+  --violet-11: #f2a5a5;
+  --violet-12: #fbdddd;
+  --violet-a1: #ff8d7d0d;
+  --violet-a2: #ff9d8615;
+  --violet-a3: #ff776c27;
+  --violet-a4: #ff706939;
+  --violet-a5: #ff706b48;
+  --violet-a6: #ff747058;
+  --violet-a7: #ff787571;
+  --violet-a8: #ff7b7998;
+  --violet-a9: #ff8584d9;
+  --violet-a10: #ff9291e2;
+  --violet-a11: #ffaeaef2;
+  --violet-a12: #ffe1e0fb;
+  --violet-contrast: #ffffff;
+  --violet-surface: #2f1a1a80;
+  --violet-indicator: var(--violet-9);
+  --violet-track: var(--violet-9);
+
+  /* Brand-tinted zinc, same mix ratios as the dashboard's html.theme-tinted */
+  --gray-1: color-mix(in oklab, #0f0f11 91%, var(--sfs-tint));
+  --gray-2: color-mix(in oklab, #18181b 89%, var(--sfs-tint));
+  --gray-3: color-mix(in oklab, #1c1c1f 89%, var(--sfs-tint));
+  --gray-4: color-mix(in oklab, #232326 86%, var(--sfs-tint));
+  --gray-5: color-mix(in oklab, #27272a 78%, var(--sfs-tint));
+  --gray-6: color-mix(in oklab, #27272a 84%, var(--sfs-tint));
+  --gray-7: color-mix(in oklab, #3f3f46 82%, var(--sfs-tint));
+  --gray-8: color-mix(in oklab, #52525b 86%, var(--sfs-tint));
+  --gray-9: color-mix(in oklab, #71717a 88%, var(--sfs-tint));
+  --gray-10: color-mix(in oklab, #85858f 88%, var(--sfs-tint));
+  --gray-11: color-mix(in oklab, #a1a1aa 90%, var(--sfs-tint));
+  --gray-12: color-mix(in oklab, #e4e4e7 93%, var(--sfs-tint));
+}
+
+/* ---------- Surfaces & text: light ---------- */
+html.light-theme .radix-themes,
+.radix-themes.radix-themes.radix-themes.light {
+  --color-background: color-mix(in oklab, #fafafa 95%, var(--sfs-tint));
+  --color-landmark: color-mix(in oklab, #18181b 89%, var(--sfs-tint));
+  --color-text-high: color-mix(in oklab, #18181b 89%, var(--sfs-tint));
+  --color-text-mid: color-mix(in oklab, #3f3f46 86%, var(--sfs-tint));
+  --color-text-low: color-mix(in oklab, #52525b 88%, var(--sfs-tint));
+  --color-text-disabled: color-mix(in oklab, #a1a1aa 90%, var(--sfs-tint));
+}
+
+/* ---------- Surfaces & text: dark (matches the SFS dashboard) ---------- */
+html.dark-theme .radix-themes,
+.radix-themes.radix-themes.radix-themes.dark {
+  --color-background: color-mix(in oklab, #09090b 93%, var(--sfs-tint));
+  --color-panel-solid: color-mix(in oklab, #18181b 89%, var(--sfs-tint));
+  --color-panel-translucent: color-mix(
+    in oklab,
+    rgba(24, 24, 27, 0.8) 89%,
+    var(--sfs-tint)
+  );
+  --color-surface-solid: color-mix(in oklab, #0f0f11 91%, var(--sfs-tint));
+  --color-surface: rgba(0, 0, 0, 0.3);
+  --color-landmark: color-mix(in oklab, #0f0f11 91%, var(--sfs-tint));
+  --color-text-high: #fafafa;
+  --color-text-mid: color-mix(in oklab, #d4d4d8 92%, var(--sfs-tint));
+  --color-text-low: color-mix(in oklab, #a1a1aa 90%, var(--sfs-tint));
+  --color-text-disabled: color-mix(in oklab, #71717a 88%, var(--sfs-tint));
+}
+
+/* ---------- Legacy (non-Radix) theme variables from styles/theme.scss ---------- */
+html.light-theme {
+  --text-color-primary: #b54848;
+  --text-color-on-background-primary-light: #5a2424;
+  --background-primary-light: #fdecec;
+  --form-switch-background-active: #da7272;
+  --radio-button-fill: #da7272;
+  --alert-info-purple-background: #da72720d;
+  --alert-info-purple-border-color: #da72721a;
+  --alert-info-purple-color: #b54848;
+  --custom-markdown-border: #da727240;
+  --header-revision-log: #fdecec;
+  --step-color: #b54848;
+}
+
+html.dark-theme {
+  --background-color: color-mix(in oklab, #09090b 93%, var(--sfs-tint));
+  --surface-background-color: color-mix(in oklab, #18181b 89%, var(--sfs-tint));
+  --surface-background-color-alt: color-mix(
+    in oklab,
+    #1c1c1f 89%,
+    var(--sfs-tint)
+  );
+  --table-row-hover-background-color: rgba(113, 113, 122, 0.16);
+  --table-row-highlight-background-color: color-mix(
+    in oklab,
+    #232326 86%,
+    var(--sfs-tint)
+  );
+  --background-primary-light: #2f1a1a;
+  --background-highlight: rgba(218, 114, 114, 0.04);
+  --text-color-table: color-mix(in oklab, #d4d4d8 92%, var(--sfs-tint));
+  --text-color-th: #fafafa;
+  --text-dark: #fafafa;
+  --text-color-muted: color-mix(in oklab, #a1a1aa 90%, var(--sfs-tint));
+  --text-color-primary: #f2a5a5;
+  --text-color-on-background-primary-light: #f2a5a5;
+  --form-input-group-background: color-mix(
+    in oklab,
+    #18181b 89%,
+    var(--sfs-tint)
+  );
+  --form-multivalue-background-color: color-mix(
+    in oklab,
+    #27272a 84%,
+    var(--sfs-tint)
+  );
+  --form-switch-background-active: #da7272;
+  --markdown-code-background: rgba(255, 255, 255, 0.08);
+  --alert-info-purple-background: #da72720d;
+  --alert-info-purple-border-color: #da72721a;
+  --alert-info-purple-color: #f2a5a5;
+  --custom-markdown-border: #da7272;
+  --border-color-100: color-mix(in oklab, #27272a 84%, var(--sfs-tint));
+  --border-color-200: color-mix(in oklab, #27272a 84%, var(--sfs-tint));
+  --border-color-300: color-mix(in oklab, #3f3f46 82%, var(--sfs-tint));
+  --select-hover-background: color-mix(in oklab, #232326 86%, var(--sfs-tint));
+  --disabled-background: color-mix(in oklab, #27272a 84%, var(--sfs-tint));
+  --callout-grey: color-mix(in oklab, #27272a 84%, var(--sfs-tint));
+  --header-revision-log: #2f1a1a;
+  --radio-button-fill: #da7272;
+  --step-color: #f2a5a5;
+}
+
+/* Scrollbars, as in the SFS dashboard */
+html.dark-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+html.dark-theme ::-webkit-scrollbar-track {
+  background: transparent;
+}
+html.dark-theme ::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklab, #27272a 84%, var(--sfs-tint));
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+html.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in oklab, #3f3f46 86%, var(--sfs-tint));
+}

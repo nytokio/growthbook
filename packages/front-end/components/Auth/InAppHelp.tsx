@@ -139,8 +139,8 @@ export default function InAppHelp() {
               style={{ background: "var(--violet-9)", color: "white" }}
             >
               <img
-                alt="GrowthBook"
-                src="/logo/growth-book-logomark-white.svg"
+                alt="SFS"
+                src="/logo/sfs-logomark.svg"
                 style={{ height: 22 }}
               />
               <Heading as="h4" size="sm" mb="0">

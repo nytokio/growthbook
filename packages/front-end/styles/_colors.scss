@@ -25,7 +25,7 @@ $second-blue: #267ba5;
 
 // redesign colors:
 $dark-blue: #050549;
-$highlight-purple: #7c45ea;
+$highlight-purple: #da7272; // SFS brand
 $highlight-purple-light: lighten($highlight-purple, 20%);
 $purple-tint: #a3a8c2;
 $dark-purple2: #1c0555;
@@ -53,7 +53,7 @@ $lighter-red: #faeeeb;
 $dark-red: #540000;
 $bg-impact: $blue;
 
-$primary: $primary-blue;
+$primary: #da7272; // SFS brand
 $secondary: $gray-600;
 $success: $green;
 $info: $cyan;

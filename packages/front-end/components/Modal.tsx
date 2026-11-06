@@ -209,9 +209,9 @@ const Modal: FC<ModalProps> = ({
             <h4 className="modal-title">
               {header === "logo" ? (
                 <img
-                  alt="GrowthBook"
-                  src="/logo/growthbook-logo.png"
-                  style={{ height: 40 }}
+                  alt="SFS"
+                  src="/logo/sfs-logo-brand.svg"
+                  style={{ height: 28 }}
                 />
               ) : (
                 header
