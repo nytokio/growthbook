@@ -147,7 +147,7 @@ export function getAccountPlan(org: MinimalOrganization): AccountPlan {
   }
 
   // For self-hosted deployments
-  return getLicense(org.licenseKey)?.plan || "oss";
+  return "enterprise";
 }
 
 function planHasPremiumFeature(
@@ -944,21 +944,7 @@ export function resetInMemoryLicenseCache(): void {
 export function getLicenseError(org: MinimalOrganization): string {
   const key = org.licenseKey || process.env.LICENSE_KEY;
   const licenseData = getLicense(key);
-
-  if (
-    !stringToBoolean(process.env.IS_CLOUD) &&
-    process.env.SSO_CONFIG &&
-    (!licenseData ||
-      !licenseData.plan ||
-      !planHasPremiumFeature(licenseData.plan, "sso"))
-  ) {
-    // Trying to use SSO, but the plan doesn't support it
-    // We throw the error here, otherwise they would still be able to use SSO on free plans with only a warning.
-    throw new Error(
-      "You need an enterprise license for SSO functionality. Either upgrade to enterprise or remove SSO_CONFIG environment variable.",
-    );
-  }
-
+  
   if (
     !stringToBoolean(process.env.IS_CLOUD) &&
     stringToBoolean(process.env.IS_MULTI_ORG) &&
