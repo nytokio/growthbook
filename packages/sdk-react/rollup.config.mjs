@@ -1,3 +1,4 @@
+import path from "node:path";
 import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import replace from "@rollup/plugin-replace";
@@ -11,7 +12,7 @@ export default {
     // Bundle local files
     if (
       id.startsWith(".") ||
-      id.startsWith("/") ||
+      path.isAbsolute(id) ||
       id.startsWith("\0") ||
       id.includes("src/")
     ) {
