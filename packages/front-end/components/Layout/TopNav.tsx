@@ -45,7 +45,7 @@ import NoticeStack from "@/components/Notices/NoticeStack";
 import useAccountPlanNotices from "@/components/Notices/useAccountPlanNotices";
 import useKeyExpiryNotices from "@/components/Notices/useKeyExpiryNotices";
 import { usePayloadSizeNotices } from "@/components/Features/SDKConnections/PayloadSizeNotices";
-import AccountPlanBadge from "@/components/Layout/AccountPlanBadge";
+import ProjectSelector from "@/components/Layout/ProjectSelector";
 import { useOpenRevisionCount } from "@/hooks/useRevisions";
 import { useAgentPanel } from "@/components/Agent/AgentPanelContext";
 import styles from "./TopNav.module.scss";
@@ -437,7 +437,7 @@ const TopNav: FC<{
   return (
     <>
       <Head>
-        <title>{pageTitle ? `${pageTitle} | SFS` : "SFS"}</title>
+        <title>{pageTitle ? `${pageTitle} | DIVE` : "DIVE"}</title>
       </Head>
       {editUserOpen && (
         <Modal
@@ -484,7 +484,7 @@ const TopNav: FC<{
           ) : showLogo ? (
             <div>
               <img
-                alt="SFS"
+                alt="DIVE"
                 src="/logo/sfs-logo-brand.svg"
                 style={{ height: 28 }}
               />
@@ -496,9 +496,7 @@ const TopNav: FC<{
               <div className="nav-link">
                 <NoticeStack notices={notices} />
               </div>
-              <div className="nav-link">
-                <AccountPlanBadge />
-              </div>
+              <ProjectSelector compact />
             </>
           )}
           {renderOrganizationDropDown()}

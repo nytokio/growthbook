@@ -5,12 +5,8 @@ import { useRouter } from "next/router";
 import { BsSearch } from "react-icons/bs";
 import { Flex } from "@radix-ui/themes";
 import { getGrowthBookBuild } from "@/services/env";
-import { useUser } from "@/services/UserContext";
 import { inferDocUrl } from "@/components/DocLink";
-import UpgradeModal from "@/components/Settings/UpgradeModal";
 import { WhiteButton } from "@/ui/Button";
-import usePermissionsUtil from "@/hooks/usePermissionsUtils";
-import ProjectSelector from "./ProjectSelector";
 import SidebarLink, { SidebarLinkProps } from "./SidebarLink";
 import { isSettingsRoute, navlinks } from "./sidebarNav";
 import TopNav from "./TopNav";
@@ -61,15 +57,7 @@ const otherPageTitles = [
 
 const Layout = (): React.ReactElement => {
   const { open, setOpen } = useSidebarOpen();
-  const permissionsUtil = usePermissionsUtil();
-  const { organization, canSubscribe } = useUser();
   const { breadcrumb } = usePageHead();
-
-  const [upgradeModal, setUpgradeModal] = useState(false);
-  const showUpgradeButton =
-    canSubscribe &&
-    permissionsUtil.canManageBilling() &&
-    !organization.isVercelIntegration;
 
   // hacky:
   const router = useRouter();
@@ -118,13 +106,6 @@ const Layout = (): React.ReactElement => {
 
   return (
     <>
-      {upgradeModal && (
-        <UpgradeModal
-          close={() => setUpgradeModal(false)}
-          source="layout"
-          commercialFeature={null}
-        />
-      )}
       <div
         className={clsx(styles.sidebar, "sidebar mb-5", {
           [styles.sidebaropen]: open,
@@ -137,18 +118,18 @@ const Layout = (): React.ReactElement => {
                 href="/"
                 aria-current="page"
                 className="app-sidebar-logo active"
-                title="SFS Home"
+                title="DIVE Home"
                 onClick={() => setOpen(false)}
               >
                 <div className={styles.sidebarlogo}>
                   <img
                     className={styles.logo}
-                    alt="SFS"
+                    alt="DIVE"
                     src="/logo/sfs-logomark.svg"
                   />
                   <img
                     className={styles.logotext}
-                    alt="SFS"
+                    alt="DIVE"
                     src="/logo/sfs-name-white.svg"
                   />
                 </div>
@@ -205,7 +186,6 @@ const Layout = (): React.ReactElement => {
                     </span>
                   </button>
                 </li>
-                <ProjectSelector />
                 {navlinks.map((v) => (
                   <SidebarLink
                     key={v.href}
@@ -219,11 +199,6 @@ const Layout = (): React.ReactElement => {
         </div>
         <div style={{ flex: 1 }} />
         <Flex p="3" direction="column" gap="4">
-          {showUpgradeButton && (
-            <WhiteButton onClick={() => setUpgradeModal(true)}>
-              <>Upgrade</>
-            </WhiteButton>
-          )}
           <a href={inferDocUrl()} target="_blank" rel="noreferrer">
             <WhiteButton variant="outline">View docs</WhiteButton>
           </a>

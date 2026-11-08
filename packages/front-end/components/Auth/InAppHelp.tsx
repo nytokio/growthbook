@@ -5,15 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { BsQuestionLg, BsXLg } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import { PiChatCircleFill } from "react-icons/pi";
-import { Flex, Separator } from "@radix-ui/themes";
+import { Flex } from "@radix-ui/themes";
 import { useUser } from "@/services/UserContext";
 import { isCloud } from "@/services/env";
 import Button from "@/ui/Button";
 import { Popover } from "@/ui/Popover";
 import Heading from "@/ui/Heading";
 import Text from "@/ui/Text";
-import { GBPremiumBadge } from "@/components/Icons";
-import UpgradeModal from "@/components/Settings/UpgradeModal";
 import styles from "./InAppHelp.module.scss";
 
 // Pylon's launcher is a third-party iframe, so its footprint can't be measured.
@@ -28,7 +26,6 @@ export default function InAppHelp() {
   const launcher = useRef<HTMLButtonElement>(null);
   const config = useFeature("pylon-config").value;
   const [showFreeHelpWidget, setShowFreeHelpWidget] = useState(false);
-  const [upgradeModal, setUpgradeModal] = useState(false);
   const {
     name,
     email,
@@ -36,7 +33,6 @@ export default function InAppHelp() {
     hasCommercialFeature,
     commercialFeatures,
   } = useUser();
-  const showUpgradeModal = !hasCommercialFeature("livechat") && isCloud();
 
   useEffect(() => {
     if (window["pylon"] || !config) return;
@@ -82,14 +78,6 @@ export default function InAppHelp() {
 
   return (
     <>
-      {upgradeModal && (
-        <UpgradeModal
-          close={() => setUpgradeModal(false)}
-          source="in-app-help"
-          commercialFeature="livechat"
-        />
-      )}
-
       <Popover
         open={showFreeHelpWidget}
         onOpenChange={setShowFreeHelpWidget}
@@ -139,7 +127,7 @@ export default function InAppHelp() {
               style={{ background: "var(--violet-9)", color: "white" }}
             >
               <img
-                alt="SFS"
+                alt="DIVE"
                 src="/logo/sfs-logomark.svg"
                 style={{ height: 22 }}
               />
@@ -178,22 +166,6 @@ export default function InAppHelp() {
               >
                 View docs
               </Button>
-              {showUpgradeModal && (
-                <>
-                  <Separator size="4" />
-                  <Text weight="medium" color="text-high">
-                    Upgrade to unlock live chat support and premium features.
-                  </Text>
-                  <Button
-                    variant="soft"
-                    icon={<GBPremiumBadge />}
-                    iconPosition="right"
-                    onClick={() => setUpgradeModal(true)}
-                  >
-                    Upgrade now
-                  </Button>
-                </>
-              )}
             </Flex>
           </>
         }

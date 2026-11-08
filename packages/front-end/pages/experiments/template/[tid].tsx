@@ -12,7 +12,6 @@ import Button from "@/ui/Button";
 import NewExperimentForm from "@/components/Experiment/NewExperimentForm";
 import { useUser } from "@/services/UserContext";
 import LinkButton from "@/ui/LinkButton";
-import UpgradeModal from "@/components/Settings/UpgradeModal";
 import TemplateForm from "@/components/Experiment/Templates/TemplateForm";
 
 const TemplatePage: FC = () => {
@@ -23,7 +22,6 @@ const TemplatePage: FC = () => {
   const [openTemplateModal, setOpenTemplateModal] = useState<
     ExperimentTemplateInterface | undefined
   >(undefined);
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const { hasCommercialFeature, permissionsUtil } = useUser();
 
   const template = templatesMap.get(tid as string);
@@ -141,13 +139,6 @@ const TemplatePage: FC = () => {
           </table>
         ) : (
           <>
-            {showUpgradeModal && (
-              <UpgradeModal
-                close={() => setShowUpgradeModal(false)}
-                source="templates"
-                commercialFeature="templates"
-              />
-            )}
             <div className="appbox p-5 text-center">
               <h1>Create an Experiment from this Template</h1>
               <Text size="3">
@@ -163,17 +154,9 @@ const TemplatePage: FC = () => {
                 >
                   View docs
                 </LinkButton>
-                {canCreate ? (
+                {canCreate && (
                   <Button onClick={() => setOpenNewExperimentModal(true)}>
                     Create Experiment
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={() => {
-                      setShowUpgradeModal(true);
-                    }}
-                  >
-                    Upgrade Plan
                   </Button>
                 )}
               </div>

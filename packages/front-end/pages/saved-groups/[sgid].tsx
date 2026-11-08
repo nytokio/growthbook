@@ -66,7 +66,6 @@ import {
 } from "@/components/SavedGroups/SavedGroupDiffRenders";
 import { DocLink } from "@/components/DocLink";
 import Callout from "@/ui/Callout";
-import UpgradeModal from "@/components/Settings/UpgradeModal";
 import Button from "@/ui/Button";
 import ConditionDisplay from "@/components/Features/ConditionDisplay";
 import SavedGroupReferences from "@/components/SavedGroups/SavedGroupReferences";
@@ -137,7 +136,6 @@ export default function EditSavedGroupPage() {
   const [newDraftTitle, setNewDraftTitle] = useState("");
   const [newDraftTitleStash, setNewDraftTitleStash] = useState("");
   const [editingNewDraftTitle, setEditingNewDraftTitle] = useState(false);
-  const [upgradeModal, setUpgradeModal] = useState(false);
   const [creatingDraft, setCreatingDraft] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [adminBypassSizeLimit, setAdminBypassSizeLimit] = useState(false);
@@ -1456,20 +1454,12 @@ export default function EditSavedGroupPage() {
               onReviewPublish={() => setTabAndScroll("review")}
               onEditDescription={() => setEditDescriptionModal(true)}
             />
-            {upgradeModal && (
-              <UpgradeModal
-                close={() => setUpgradeModal(false)}
-                source="remote-saved-groups"
-                commercialFeature="large-saved-groups"
-              />
-            )}
             {remoteLocked && (
               <Callout status="warning" mb="4">
                 Changing Remote Groups needs an Enterprise plan. Feature Flags
                 and experiments that use this group keep working, and you can
                 still archive or unarchive it, but you can&apos;t upload IDs,
-                change its version, publish other drafts or roll back.{" "}
-                <Link onClick={() => setUpgradeModal(true)}>Upgrade</Link>
+                change its version, publish other drafts or roll back.
               </Callout>
             )}
             {savedGroup.type === "remote" ? (

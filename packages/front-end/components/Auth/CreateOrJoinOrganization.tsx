@@ -137,7 +137,7 @@ const CreateOrJoinOrganization: FC<{
           <img
             src="/logo/sfs-logo-white.svg"
             style={{ maxWidth: "150px" }}
-            alt="SFS"
+            alt="DIVE"
           />
         </a>
       </Box>

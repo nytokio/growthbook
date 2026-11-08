@@ -168,14 +168,14 @@ export default function TopNavLite({ pageTitle }: { pageTitle?: string }) {
   return (
     <div className={`navbar ${styles.topbarlite}`}>
       <Head>
-        <title>SFS</title>
+        <title>DIVE</title>
       </Head>
       <div style={{ width: 240 }}>
         <Link href="/">
           {theme === "dark" ? (
             <>
               <img
-                alt="SFS"
+                alt="DIVE"
                 src="/logo/sfs-logo-white.svg"
                 style={{ width: 160, height: 30, marginLeft: 4, marginTop: -8 }}
               />
@@ -183,7 +183,7 @@ export default function TopNavLite({ pageTitle }: { pageTitle?: string }) {
           ) : (
             <>
               <img
-                alt="SFS"
+                alt="DIVE"
                 src="/logo/sfs-logo-color.svg"
                 style={{ width: 160, height: 30, marginLeft: 4, marginTop: -8 }}
               />

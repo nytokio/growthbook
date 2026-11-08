@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { FaCaretDown } from "react-icons/fa";
-import { FC, useEffect } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import { isDemoDatasourceProject } from "shared/demo-datasource";
 import { useDefinitions } from "@/services/DefinitionsContext";
 import { useAuth } from "@/services/auth";
@@ -52,6 +52,7 @@ function ProjectName({
   caret = false,
   size = "small",
   badge,
+  compact = false,
 }: {
   display: string;
   avatarName: string;
@@ -60,11 +61,15 @@ function ProjectName({
   caret?: boolean;
   size?: "small" | "large";
   badge: ProjectDropdownBadgeProps | null;
+  compact?: boolean;
 }) {
   return (
     <div
       className={clsx(className, "d-flex align-items-center")}
-      style={{ padding: "5px 10px" }}
+      style={{
+        padding: compact ? "2px 4px" : "5px 10px",
+        fontSize: compact ? 13 : undefined,
+      }}
     >
       <div className="position-relative">
         <LetterAvatar name={avatarName} defaultInitials="ALL" size={size} />
@@ -74,8 +79,14 @@ function ProjectName({
         style={{
           flex: 1,
           lineHeight: 1.2,
-          whiteSpace: "normal",
-          wordBreak: "break-word",
+          ...(compact
+            ? {
+                maxWidth: 160,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }
+            : { whiteSpace: "normal", wordBreak: "break-word" }),
         }}
       >
         {bold ? (
@@ -84,12 +95,16 @@ function ProjectName({
           display
         )}
       </div>
-      {caret && <FaCaretDown />}
+      {caret && <FaCaretDown className={compact ? "ml-1" : undefined} />}
     </div>
   );
 }
 
-export default function ProjectSelector() {
+export default function ProjectSelector({
+  compact = false,
+}: {
+  compact?: boolean;
+}) {
   const { projects, project, getProjectById, setProject } = useDefinitions();
   const { orgId } = useAuth();
   const current = getProjectById(project);
@@ -115,9 +130,12 @@ export default function ProjectSelector() {
 
   if (!projects.length) return null;
 
-  // If globalRole doesn't give readAccess & user can only access 1 project, don't show dropdown
-  if (projects.length === 1 && !permissions.check("readData", "")) {
-    return (
+  const wrap = (children: ReactNode) =>
+    compact ? (
+      <div className="nav-link" style={{ textTransform: "none" }}>
+        {children}
+      </div>
+    ) : (
       <li
         style={{
           marginTop: 0,
@@ -126,98 +144,97 @@ export default function ProjectSelector() {
           maxWidth: 240,
         }}
       >
-        <ProjectName
-          caret={false}
-          avatarName={projects[0].name}
-          display={projects[0].name}
-          badge={
-            isDemoDatasourceProject({
-              projectId: projects[0].id,
-              organizationId: orgId || "",
-            })
-              ? demoBadge
-              : null
-          }
-        />
+        {children}
       </li>
+    );
+
+  // If globalRole doesn't give readAccess & user can only access 1 project, don't show dropdown
+  if (projects.length === 1 && !permissions.check("readData", "")) {
+    return wrap(
+      <ProjectName
+        compact={compact}
+        caret={false}
+        avatarName={projects[0].name}
+        display={projects[0].name}
+        badge={
+          isDemoDatasourceProject({
+            projectId: projects[0].id,
+            organizationId: orgId || "",
+          })
+            ? demoBadge
+            : null
+        }
+      />,
     );
   }
 
-  return (
-    <li
-      style={{
-        marginTop: 0,
-        marginBottom: "20px",
-        textTransform: "none",
-        maxWidth: 240,
-      }}
+  return wrap(
+    <Dropdown
+      uuid="project-selector"
+      caret={false}
+      right={compact}
+      width={220}
+      className={"p-0 pb-2"}
+      toggle={
+        <ProjectName
+          caret
+          avatarName={current?.name || ""}
+          display={current?.name || "All Projects"}
+          bold={true}
+          badge={currentProjectIsDemoProject ? demoBadge : null}
+          size={compact ? "small" : "large"}
+          compact={compact}
+        />
+      }
     >
-      <Dropdown
-        uuid="project-selector"
-        caret={false}
-        right={false}
-        width={220}
-        className={"p-0 pb-2"}
-        toggle={
-          <ProjectName
-            caret
-            avatarName={current?.name || ""}
-            display={current?.name || "All Projects"}
-            bold={true}
-            badge={currentProjectIsDemoProject ? demoBadge : null}
-            size="large"
-          />
-        }
+      <div className="mt-2 mx-2">
+        <Field
+          size="legacy"
+          placeholder="Search..."
+          type="search"
+          {...searchInputProps}
+        />
+      </div>
+      <DropdownLink
+        onClick={() => {
+          setProject("");
+        }}
+        className="p-0 px-1"
       >
-        <div className="mt-2 mx-2">
-          <Field
-            size="legacy"
-            placeholder="Search..."
-            type="search"
-            {...searchInputProps}
-          />
-        </div>
-        <DropdownLink
-          onClick={() => {
-            setProject("");
-          }}
-          className="p-0 px-1"
-        >
-          <ProjectName
-            badge={null}
-            className="text-dark"
-            avatarName={""}
-            display={"All Projects"}
-            bold={!project}
-          />
-        </DropdownLink>
-        {items.map((p) => {
-          return (
-            <DropdownLink
-              className="p-0 px-1"
-              key={p.id}
-              onClick={() => {
-                setProject(p.id);
-              }}
-            >
-              <ProjectName
-                className="text-dark"
-                avatarName={p.name}
-                display={p.name}
-                bold={p.id === project}
-                badge={
-                  isDemoDatasourceProject({
-                    projectId: p.id,
-                    organizationId: orgId || "",
-                  })
-                    ? demoBadge
-                    : null
-                }
-              />
-            </DropdownLink>
-          );
-        })}
-      </Dropdown>
-    </li>
+        <ProjectName
+          badge={null}
+          className="text-dark"
+          avatarName={""}
+          display={"All Projects"}
+          bold={!project}
+        />
+      </DropdownLink>
+      {items.map((p) => {
+        return (
+          <DropdownLink
+            className="p-0 px-1"
+            key={p.id}
+            onClick={() => {
+              setProject(p.id);
+            }}
+          >
+            <ProjectName
+              className="text-dark"
+              avatarName={p.name}
+              display={p.name}
+              bold={p.id === project}
+              badge={
+                isDemoDatasourceProject({
+                  projectId: p.id,
+                  organizationId: orgId || "",
+                })
+                  ? demoBadge
+                  : null
+              }
+            />
+          </DropdownLink>
+        );
+      })}
+    </Dropdown>,
   );
 }
